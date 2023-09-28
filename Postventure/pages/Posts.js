@@ -1,26 +1,47 @@
 import {View, Box, Flex, Stack, Input, Text, InputGroup, InputRightAddon} from "native-base"
 import Icon from "react-native-vector-icons/Ionicons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TouchableHighlight } from "react-native-web";
 import { TouchableOpacity } from "react-native";
+import {socket} from "../assets/socket";
 
 const Posts = () => {
     const [post, setPost] = useState({
         name : "",
         content : ""
     })
-    let [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState([]);
+    let postsArray = [];
+    
+    if (socket.disconnect) {
+        socket.connect();
+    }
+
+    socket.on("message", (res) => {
+        console.log(res);
+    })
+
+    socket.on("showPosts", (res) => {
+        setPosts(res);
+    })
+
+    useEffect(() => {
+        socket.emit("reqPosts");
+    }, [])
+
+    posts.map(item => {
+        postsArray.push(item)
+    })
 
     function postTest() {
-        setPosts((prev) => ([...prev, { name: post.name, content: post.content }]));
-        console.log(posts)
+        socket.emit("makePost", post)
         
         setPost((prev) => ({...prev, content : ""}));
     }
 
-    const renderPosts = posts.map((item, index) => {
-        return <Stack key={index} space={2} direction="column" w="90%" h="fit-content">
-            <Text display={(index > 0) ? (item.name == posts[index - 1].name) ? "none" : "normal" : "normal"} fontWeight="semibold" fontSize="25px" color={(item.name == post.name) ? "#a2d3f5" : "#f5d3a2"} borderBottomColor="#fff">{item.name + " >"}</Text>
+    const renderPosts = postsArray.map((item, index) => {
+        return <Stack key={item.id} space={2} direction="column" w="90%" h="fit-content">
+            <Text display={(index > 0) ? (item.name == postsArray[index - 1].name) ? "none" : "normal" : "normal"} fontWeight="semibold" fontSize="25px" color={(item.name == post.name) ? "#a2d3f5" : "#f5d3a2"} borderBottomColor="#fff">{item.name + " >"}</Text>
             <Text textAlign="justify" color="#fff" fontSize="22px">{item.content}</Text>
         </Stack>
     })

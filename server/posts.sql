@@ -1,0 +1,9 @@
+Drop database if exists `posts`;
+CREATE SCHEMA IF NOT EXISTS `posts` DEFAULT CHARACTER SET utf8 ;
+
+CREATE TABLE IF NOT EXISTS `posts`.`Post` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `content` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
