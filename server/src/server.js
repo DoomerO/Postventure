@@ -8,19 +8,19 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
-const postgres = require('postgres');
+//const postgres = require('postgres');
 
-const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
-const URL = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?options=project%3D${ENDPOINT_ID}`;
+//const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+//const URL = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?options=project%3D${ENDPOINT_ID}`;
 
-const sql = postgres(URL, { ssl: 'require' });
+//const sql = postgres(URL, { ssl: 'require' });
 
-async function getPgVersion() {
-  const result = await sql`2.18.1`;
-  console.log(result);
-}
+//async function getPgVersion() {
+  //const result = await sql`2.18.1`;
+  //console.log(result);
+//}
 
-getPgVersion();
+//getPgVersion();
 
 const {Server} = require('socket.io');
 
